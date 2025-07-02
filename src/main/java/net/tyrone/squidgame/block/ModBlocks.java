@@ -12,43 +12,31 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.tyrone.squidgame.SquidGame;
+import net.tyrone.squidgame.SquidGameMod;
+import net.tyrone.squidgame.block.custom.FakeGlassBlock;
+import net.tyrone.squidgame.block.custom.SafeGlassBlock;
 
 public class ModBlocks {
-    public static final Block PINK_GARNET_BLOCK = registerBlock("pink_garnet_block",
-            new Block(AbstractBlock.Settings.create().strength(4f)
-                    .requiresTool().sounds(BlockSoundGroup.AMETHYST_BLOCK)));
 
-    public static final Block RAW_PINK_GARNET_BLOCK = registerBlock("raw_pink_garnet_block",
-            new Block(AbstractBlock.Settings.create().strength(4f)
-                    .requiresTool().sounds(BlockSoundGroup.AMETHYST_CLUSTER)));
-
-    public static final Block PINK_GARNET_ORE = registerBlock("pink_garnet_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(2, 5),
-                    AbstractBlock.Settings.create().strength(3f).requiresTool()));
-
-    public static final Block PINK_GARNET_DEEPSLATE_ORE = registerBlock("pink_garnet_deepslate_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(2, 6),
-                    AbstractBlock.Settings.create().strength(3f).requiresTool().sounds(BlockSoundGroup.DEEPSLATE)));
-
+    public static final Block SAFE_GLASS = registerBlock("safe_glass", new SafeGlassBlock());
+    public static final Block FAKE_GLASS = registerBlock("fake_glass", new FakeGlassBlock());
 
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
-        return Registry.register(Registries.BLOCK, Identifier.of(SquidGame.MOD_ID, name), block);
+        return Registry.register(Registries.BLOCK, Identifier.of(SquidGameMod.MOD_ID, name), block);
     }
 
     private static void registerBlockItem(String name, Block block) {
-        Registry.register(Registries.ITEM, Identifier.of(SquidGame.MOD_ID, name),
+        Registry.register(Registries.ITEM, Identifier.of(SquidGameMod.MOD_ID, name),
                 new BlockItem(block, new Item.Settings()));
     }
 
     public static void registerModBlocks() {
-        SquidGame.LOGGER.info("Registering for " + SquidGame.MOD_ID);
+        SquidGameMod.LOGGER.info("Registering for " + SquidGameMod.MOD_ID);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
-        entries.add(ModBlocks.PINK_GARNET_BLOCK);
-        entries.add(ModBlocks.RAW_PINK_GARNET_BLOCK);
+
         });
     }
 }

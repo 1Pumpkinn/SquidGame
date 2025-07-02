@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "tutorialmod",
+	"id": "squidgame",
 	"version": "${version}",
 	"name": "Tutorial Mod",
 	"description": "Squid Game",
@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.tyrone.squidgame.SquidGame"
+			"net.tyrone.squidgame.SquidGameMod"
 		],
 		"fabric-datagen": [
 			"net.tyrone.squidgame.SquidGameDataGenerator"
