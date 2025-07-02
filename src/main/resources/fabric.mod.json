@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "tutorialmod",
+	"version": "${version}",
+	"name": "Tutorial Mod",
+	"description": "Squid Game",
+	"authors": [
+		"___Pumpkinn!"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/tutorialmod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.tyrone.squidgame.SquidGame"
+		],
+		"fabric-datagen": [
+			"net.tyrone.squidgame.SquidGameDataGenerator"
+		],
+		"client": [
+			"net.tyrone.squidgame.SquidGameClient"
+		]
+	},
+	"mixins": [
+		"squidgame.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
