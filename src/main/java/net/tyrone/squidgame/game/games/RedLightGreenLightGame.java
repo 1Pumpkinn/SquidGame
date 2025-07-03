@@ -22,6 +22,8 @@ public class RedLightGreenLightGame extends SquidGame {
     private final long toggleInterval = 80; // Toggle every 4 seconds
     private final long maxGameTime = 2700; // 90 seconds in ticks
     private boolean gameStarted = false;
+    private long lastToggleTick = 0;
+    private final long reactionTime = 20; // 1 second grace period (20 ticks)
 
     private final BlockPos startPos = new BlockPos(0, 100, 0);
     private final BlockPos endPos = new BlockPos(0, 100, 100);
@@ -36,7 +38,7 @@ public class RedLightGreenLightGame extends SquidGame {
             if (player != null) {
                 // Updated teleportation for 1.21
                 player.teleport(player.getServerWorld(),
-                        startPos.getX(), startPos.getY(), startPos.getZ(), 0, 0);
+                        startPos.getX(), startPos.getY(), startPos.getZ(), -108, 1);
                 lastPositions.put(uuid, player.getPos());
             }
         }
@@ -48,6 +50,7 @@ public class RedLightGreenLightGame extends SquidGame {
     @Override
     public void startGame() {
         showLightEffectToAll(true); // Start with green light
+        lastToggleTick = tickCounter;
     }
 
     @Override
@@ -68,6 +71,7 @@ public class RedLightGreenLightGame extends SquidGame {
         // Toggle red/green light
         if (tickCounter % toggleInterval == 0) {
             isGreenLight = !isGreenLight;
+            lastToggleTick = tickCounter;
             String state = isGreenLight ? "§a§lGREEN LIGHT!" : "§c§lRED LIGHT!";
             SquidGameManager.broadcastMessage(state, isGreenLight ? Formatting.GREEN : Formatting.RED);
             showLightEffectToAll(isGreenLight);
@@ -80,13 +84,16 @@ public class RedLightGreenLightGame extends SquidGame {
                 Vec3d currentPos = player.getPos();
                 Vec3d lastPos = lastPositions.get(uuid);
 
-                // Eliminate if moved during red light
+                // Only eliminate if moved during red light AND grace period has passed
                 if (!isGreenLight && lastPos != null) {
-                    double moved = currentPos.squaredDistanceTo(lastPos);
-                    if (moved > 0.001) {
-                        SquidGameManager.eliminatePlayer(uuid, "Moved during RED light");
-                        players.remove(uuid);
-                        continue;
+                    long timeSinceToggle = tickCounter - lastToggleTick;
+                    if (timeSinceToggle > reactionTime) {
+                        double moved = currentPos.squaredDistanceTo(lastPos);
+                        if (moved > 0.001) {
+                            SquidGameManager.eliminatePlayer(uuid, "Moved during RED light");
+                            players.remove(uuid);
+                            continue;
+                        }
                     }
                 }
 
@@ -117,8 +124,11 @@ public class RedLightGreenLightGame extends SquidGame {
     }
 
     private void showLightEffectToAll(boolean green) {
-        Text title = Text.literal(green ? "GREEN LIGHT" : "RED LIGHT");
-        Text subtitle = Text.literal("Don't move on red!");
+        // Create colored text for title
+        Text title = Text.literal(green ? "GREEN LIGHT" : "RED LIGHT")
+                .formatted(green ? Formatting.GREEN : Formatting.RED, Formatting.BOLD);
+        Text subtitle = Text.literal("Don't move on red!")
+                .formatted(Formatting.GRAY);
 
         for (UUID uuid : players) {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
