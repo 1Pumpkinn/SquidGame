@@ -22,7 +22,7 @@
 			"net.tyrone.squidgame.SquidGameDataGenerator"
 		],
 		"client": [
-			"net.tyrone.squidgame.SquidGameClient"
+			"net.tyrone.squidgame.client.SquidGameClientMod"
 		]
 	},
 	"mixins": [

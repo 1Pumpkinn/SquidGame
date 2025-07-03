@@ -11,22 +11,16 @@ import net.minecraft.util.Identifier;
 import net.tyrone.squidgame.SquidGameMod;
 import net.tyrone.squidgame.block.ModBlocks;
 
-
 public class ModItemGroups {
     public static final ItemGroup SQUID_GAME = Registry.register(Registries.ITEM_GROUP,
             Identifier.of(SquidGameMod.MOD_ID, "squid_game"),
-            FabricItemGroup.builder().icon(() -> new ItemStack(Items.ANDESITE))
+            FabricItemGroup.builder()
+                    .icon(() -> new ItemStack(Items.GLASS))
                     .displayName(Text.translatable("itemgroup.squidgame.squid_game"))
-
                     .entries((displayContext, entries) -> {
-                    entries.add(ModBlocks.FAKE_GLASS);
-                    entries.add(ModBlocks.SAFE_GLASS);
-
-
+                        entries.add(ModBlocks.SAFE_GLASS);
+                        entries.add(ModBlocks.FAKE_GLASS);
                     }).build());
-
-
-
 
     public static void registerItemGroups() {
         SquidGameMod.LOGGER.info("Registering Mod Item Groups for " + SquidGameMod.MOD_ID);

@@ -17,6 +17,8 @@ public class SquidGameMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		LOGGER.info("Initializing Squid Game Mod");
+
 		ModItemGroups.registerItemGroups();
 
 		// Register blocks and items
@@ -24,6 +26,7 @@ public class SquidGameMod implements ModInitializer {
 		ModItems.registerModItems();
 
 
+		// Register commands
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			SquidGameCommand.register(dispatcher);
 		});
@@ -32,8 +35,7 @@ public class SquidGameMod implements ModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 			SquidGameManager.onServerTick(server);
 		});
+
+		LOGGER.info("Squid Game Mod initialized successfully!");
 	}
 }
-
-
-

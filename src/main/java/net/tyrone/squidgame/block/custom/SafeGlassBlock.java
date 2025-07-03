@@ -12,6 +12,7 @@ public class SafeGlassBlock extends Block {
         super(AbstractBlock.Settings.create()
                 .nonOpaque()
                 .strength(0.3F)
-                .sounds(BlockSoundGroup.GLASS));
+                .sounds(BlockSoundGroup.GLASS)
+                .burnable()); // Optional: makes blocks burnable
     }
 }

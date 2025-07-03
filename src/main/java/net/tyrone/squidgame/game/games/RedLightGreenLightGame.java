@@ -34,7 +34,9 @@ public class RedLightGreenLightGame extends SquidGame {
         for (UUID uuid : players) {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player != null) {
-                player.networkHandler.requestTeleport(startPos.getX(), startPos.getY(), startPos.getZ(), 0, 0);
+                // Updated teleportation for 1.21
+                player.teleport(player.getServerWorld(),
+                        startPos.getX(), startPos.getY(), startPos.getZ(), 0, 0);
                 lastPositions.put(uuid, player.getPos());
             }
         }

@@ -1,48 +1,37 @@
 package net.tyrone.squidgame.game.games;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
 import java.util.Set;
 import java.util.UUID;
 
 public abstract class SquidGame {
     protected MinecraftServer server;
-    protected Set<UUID> players;
-    protected boolean gameRunning = false;
-    protected int gameTicks = 0;
+    protected Set<UUID> alivePlayers;
+    private boolean active = false;
 
     public abstract String getGameName();
-    public abstract void setupGame(MinecraftServer server, Set<UUID> players);
-    public abstract void startGame();
-    public abstract void endGame();
+
+    public void setupGame(MinecraftServer server, Set<UUID> players) {
+        this.server = server;
+        this.alivePlayers = players;
+        this.active = false;
+    }
+
+    public void startGame() {
+        this.active = true;
+    }
+
     public abstract void onTick();
 
-    protected void broadcastToPlayers(String message, Formatting color) {
-        if (server != null) {
-            server.getPlayerManager().broadcast(Text.literal(message).formatted(color), false);
-        }
+    public void endGame() {
+        this.active = false;
     }
 
-    protected void sendMessageToPlayer(UUID playerId, String message, Formatting color) {
-        ServerPlayerEntity player = server.getPlayerManager().getPlayer(playerId);
-        if (player != null) {
-            player.sendMessage(Text.literal(message).formatted(color), false);
-        }
+    public boolean isActive() {
+        return active;
     }
 
-    protected ServerPlayerEntity getPlayer(UUID playerId) {
-        return server.getPlayerManager().getPlayer(playerId);
-    }
-
-    protected void eliminatePlayer(UUID playerId, String reason) {
-        net.tyrone.squidgame.game.SquidGameManager.eliminatePlayer(playerId, reason);
-    }
-
-    protected void completeGame() {
-        endGame();
-        net.tyrone.squidgame.game.SquidGameManager.completeCurrentGame();
+    public Set<UUID> getAlivePlayers() {
+        return alivePlayers;
     }
 }

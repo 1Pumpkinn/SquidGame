@@ -181,11 +181,11 @@ public class SquidGameManager {
     }
 
     public static void teleportPlayersToSpawn() {
-        // Teleport all alive players to a safe spawn area
         for (UUID playerId : alivePlayers) {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(playerId);
             if (player != null) {
-                player.networkHandler.requestTeleport(0, 100, 0, 0, 0);
+                // Updated teleportation for 1.21
+                player.teleport(player.getServerWorld(), 0, 100, 0, 0, 0);
             }
         }
     }
